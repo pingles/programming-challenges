@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int is_even(int n)
+bool is_even(unsigned long n)
 {
   return (n % 2 == 0);
 }
 
-int next_value(int n)
+unsigned long next_value(unsigned long n)
 {
-  int res = 0;
+  unsigned long res = 0;
   
   if (is_even(n)) {
     res = n / 2;
@@ -22,7 +22,7 @@ int next_value(int n)
   return res;
 }
 
-int calc_cycle_length(int n)
+int calc_cycle_length(unsigned long n)
 {
   int count = 1;
   
@@ -36,10 +36,10 @@ int calc_cycle_length(int n)
 
 int main(void)
 {
-  int i, j, max, new_max;
-  int n;
+  unsigned long i, j;
+  int n, max, new_max;
   
-  while(scanf("%d %d", &i, &j) != EOF) {
+  while(scanf("%lu %lu", &i, &j) != EOF) {
     max = calc_cycle_length(i);
     n = i;
     while (n++ <= j) {
@@ -49,7 +49,7 @@ int main(void)
       }
     }
   
-    printf("%d %d %d\n", i, j, max);
+    printf("%lu %lu %d\n", i, j, max);
   }
 
   return EXIT_SUCCESS;
