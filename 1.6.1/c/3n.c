@@ -54,3 +54,13 @@ int main(void)
 
   return EXIT_SUCCESS;
 }
+
+
+/* Performance:
+   $ time echo '100001 2000000' | ./3n_c 
+   100001 2000000 557
+
+   real	0m7.662s
+   user	0m7.648s
+   sys	0m0.009s
+*/
