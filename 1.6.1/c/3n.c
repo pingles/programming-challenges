@@ -22,9 +22,9 @@ unsigned long next_value(unsigned long n)
   return res;
 }
 
-int calc_cycle_length(unsigned long n)
+unsigned long calc_cycle_length(unsigned long n)
 {
-  int count = 1;
+  unsigned long count = 1;
   
   do {
     n = next_value(n);
@@ -37,7 +37,7 @@ int calc_cycle_length(unsigned long n)
 int main(void)
 {
   unsigned long i, j;
-  int n, max, new_max;
+  unsigned long n, max, new_max;
   
   while(scanf("%lu %lu", &i, &j) != EOF) {
     max = calc_cycle_length(i);
@@ -49,7 +49,7 @@ int main(void)
       }
     }
   
-    printf("%lu %lu %d\n", i, j, max);
+    printf("%lu %lu %lu\n", i, j, max);
   }
 
   return EXIT_SUCCESS;
