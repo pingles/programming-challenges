@@ -21,3 +21,7 @@
   (apply max
          (map #(count (collatz-seq %))
               (range i j))))
+
+;; (time (max-cycle-length 100 200))
+;; "Elapsed time: 1.684 msecs"
+;; 125
