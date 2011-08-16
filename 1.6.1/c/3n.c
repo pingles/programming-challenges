@@ -13,11 +13,11 @@ bool is_even(unsigned long n)
 
 unsigned long next_value(unsigned long n, unsigned long *table)
 {
-  unsigned long res = 0;
-
   if (n < TABLE_SIZE && table[n]) {
     return table[n];
   }
+
+  unsigned long res = 0;
   
   if (is_even(n)) {
     res = n / 2;
