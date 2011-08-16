@@ -29,10 +29,10 @@ void fill_grid(char **grid, int m, int n, char val)
 char** create_grid(int m, int n)
 {
   int i;
-  char **grid = calloc(m, sizeof(char*));
+  char **grid = calloc(n, sizeof(char*));
 
   for (i = 0; i < n; i++) {
-    grid[i] = calloc(n, sizeof(char*));
+    grid[i] = calloc(m, sizeof(char*));
   }
   
   return grid;
@@ -52,7 +52,9 @@ bool in_bounds(int m, int n, int i, int j)
 void increment_cell(char **grid, int m, int n, int i, int j)
 {
   if (in_bounds(m, n, i, j)) {
-    grid[i][j]++;
+    if (grid[i][j] != '*') {
+      grid[i][j]++;
+    }
   }
 }
 
@@ -83,7 +85,7 @@ int main(void)
   int m, n;
   int i, j;
 
-  scanf("%d %d", &m, &n);
+  scanf("%d %d", &n, &m);
 
   char **grid = create_grid(m, n);  
   char *line = calloc(n, sizeof(char*));;
