@@ -1,12 +1,10 @@
 (ns programming-challenges.three-n)
 
-(defn- slow-next-value
+(defn- next-value
   [n]
   (if (even? n)
     (/ n 2)
     (+ (* n 3) 1)))
-
-(def next-value (memoize slow-next-value))
 
 (defn- collatz-seq
   ([n]
