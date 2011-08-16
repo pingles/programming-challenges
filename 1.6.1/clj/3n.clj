@@ -8,7 +8,7 @@
 
 (defn- collatz-seq
   ([n]
-     (collatz-seq n [n]))
+     (collatz-seq n (list n)))
   ([n xs]
      (lazy-seq
       (if (= n 1)
