@@ -3,30 +3,36 @@
 #include <string.h>
 #include <stdbool.h>
 
-void print_grid(char **grid, int m, int n)
+typedef struct {
+  int columns;
+  int rows;
+  char **grid;
+} matrix_t;
+
+void print_grid(matrix_t *grid)
 {
   int i, j;
   
-  for (i = 0; i < n; i++) {
-    for (j = 0; j < m; j++) {
-      printf("%c", grid[i][j]);
+  for (i = 0; i < grid->rows; i++) {
+    for (j = 0; j < grid->columns; j++) {
+      printf("%c", grid->grid[i][j]);
     }
     printf("\n");
   }
 }
 
-void fill_grid(char **grid, int m, int n, char val)
+void fill_grid(matrix_t *grid, char val)
 {
   int i, j;
   
-  for (i = 0; i < n; i++) {
-    for (j = 0; j < m; j++) {
-      grid[i][j] = val;
+  for (i = 0; i < grid->rows; i++) {
+    for (j = 0; j < grid->columns; j++) {
+      grid->grid[i][j] = val;
     }
   }
 }
 
-char** create_grid(int m, int n)
+matrix_t* create_grid(int m, int n)
 {
   int i;
   char **grid = calloc(n, sizeof(char*));
@@ -34,47 +40,58 @@ char** create_grid(int m, int n)
   for (i = 0; i < n; i++) {
     grid[i] = calloc(m, sizeof(char*));
   }
+
+  matrix_t *g = malloc(sizeof(matrix_t));
+  g->columns = m;
+  g->rows = n;
+  g->grid = grid;
   
-  return grid;
+  return g;
 }
 
-bool in_bounds(int m, int n, int i, int j)
+bool in_bounds(matrix_t *grid, int i, int j)
 {
   if (i < 0 || j < 0) {
     return false;
   }
-  if (i >= n || j >= n) {
+  if (i >= grid->rows || j >= grid->columns) {
     return false;
   }
   return true;
 }
 
-void increment_cell(char **grid, int m, int n, int i, int j)
+void increment_cell(matrix_t *grid, int i, int j)
 {
-  if (in_bounds(m, n, i, j)) {
-    if (grid[i][j] != '*') {
-      grid[i][j]++;
+  if (in_bounds(grid, i, j)) {
+    if (grid->grid[i][j] != '*') {
+      grid->grid[i][j]++;
     }
   }
 }
 
-void increment_mine_near(char **grid, int m, int n, int i, int j)
+void increment_mine_near(matrix_t *grid, int i, int j)
 {
-  increment_cell(grid, m, n, i, j - 1); // w
-  increment_cell(grid, m, n, i, j + 1); // e
-  increment_cell(grid, m, n, i - 1, j); // n
-  increment_cell(grid, m, n, i + 1, j); // s
+  increment_cell(grid, i, j - 1); // w
+  increment_cell(grid, i, j + 1); // e
+  increment_cell(grid, i - 1, j); // n
+  increment_cell(grid, i + 1, j); // s
 
-  increment_cell(grid, m, n, i + 1, j + 1); // se
-  increment_cell(grid, m, n, i - 1, j + 1); // ne
-  increment_cell(grid, m, n, i - 1, j - 1); // nw
-  increment_cell(grid, m, n, i + 1, j - 1); // sw
+  increment_cell(grid, i + 1, j + 1); // se
+  increment_cell(grid, i - 1, j + 1); // ne
+  increment_cell(grid, i - 1, j - 1); // nw
+  increment_cell(grid, i + 1, j - 1); // sw
 }
 
-void draw_mine(char **grid, int m, int n, int i, int j)
+void draw_mine(matrix_t *grid, int i, int j)
 {
-  grid[i][j] = '*';
-  increment_mine_near(grid, m, n, i, j);
+  grid->grid[i][j] = '*';
+  increment_mine_near(grid, i, j);
+}
+
+void free_grid(matrix_t *grid)
+{
+  free(grid->grid);
+  free(grid);
 }
 
 int main(void)
@@ -87,29 +104,32 @@ int main(void)
 
   scanf("%d %d", &n, &m);
 
-  char **grid = create_grid(m, n);  
+  matrix_t *input_grid = create_grid(m, n);
   char *line = calloc(n, sizeof(char*));;
   
   for (i = 0; i < n; i++) {
     scanf("%s", line);
     
     for (j = 0; j < m; j++) {
-      grid[i][j] = line[j];
+      input_grid->grid[i][j] = line[j];
     }
   }
 
-  char **output_grid = create_grid(m, n);
-  fill_grid(output_grid, m, n, '0');
+  matrix_t *output_grid = create_grid(m, n);
+  fill_grid(output_grid, '0');
   
-  for (i = 0; i < n; i++) {
-    for (j = 0; j < m; j++) {
-      if (grid[i][j] == '*') {
-        draw_mine(output_grid, m, n, i, j);
+  for (i = 0; i < output_grid->rows; i++) {
+    for (j = 0; j < output_grid->columns; j++) {
+      if (input_grid->grid[i][j] == '*') {
+        draw_mine(output_grid, i, j);
       }
     }
   }
 
-  print_grid(output_grid, m, n);
+  print_grid(output_grid);
+
+  free_grid(input_grid);
+  free_grid(output_grid);
   
   return EXIT_SUCCESS;
 }
