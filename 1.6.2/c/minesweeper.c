@@ -90,6 +90,10 @@ void draw_mine(matrix_t *grid, int i, int j)
 
 void free_grid(matrix_t *grid)
 {
+  int i;
+  for (i = 0; i < grid->rows; i++) {
+    free(grid->grid[i]);
+  }
   free(grid->grid);
   free(grid);
 }
