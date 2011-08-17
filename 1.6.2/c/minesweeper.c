@@ -9,6 +9,23 @@ typedef struct {
   char **grid;
 } matrix_t;
 
+matrix_t* create_grid(int m, int n)
+{
+  int i;
+  char **grid = calloc(n, sizeof(char*));
+
+  for (i = 0; i < n; i++) {
+    grid[i] = calloc(m, sizeof(char*));
+  }
+
+  matrix_t *g = malloc(sizeof(matrix_t));
+  g->columns = m;
+  g->rows = n;
+  g->grid = grid;
+  
+  return g;
+}
+
 void print_grid(matrix_t *grid)
 {
   int i, j;
@@ -30,23 +47,6 @@ void fill_grid(matrix_t *grid, char val)
       grid->grid[i][j] = val;
     }
   }
-}
-
-matrix_t* create_grid(int m, int n)
-{
-  int i;
-  char **grid = calloc(n, sizeof(char*));
-
-  for (i = 0; i < n; i++) {
-    grid[i] = calloc(m, sizeof(char*));
-  }
-
-  matrix_t *g = malloc(sizeof(matrix_t));
-  g->columns = m;
-  g->rows = n;
-  g->grid = grid;
-  
-  return g;
 }
 
 bool in_bounds(matrix_t *grid, int i, int j)
